@@ -1,5 +1,5 @@
-#define cmake_tut_VERSION_MAJOR @cmake_tut_VERSION_MAJOR@
-#define cmake_tut_VERSION_MINOR @cmake_tut_VERSION_MINOR@
+#define pasukim_VERSION_MAJOR @pasukim_VERSION_MAJOR@
+#define pasukim_VERSION_MINOR @pasukim_VERSION_MINOR@
 
 
 #cmakedefine USE_ADDER

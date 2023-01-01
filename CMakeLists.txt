@@ -50,15 +50,18 @@ add_subdirectory(external/glfw)
 target_include_directories(${PROJECT_NAME} 
     PUBLIC external/glfw/include
     PUBLIC ${EXTRA_INCLUDE_LIBS}
+    PUBLIC /usr/local/Cellar/boost/1.80.0/include
 ) #specify include path(s), makes includes not need full path in code files /  can use <>
 
 target_link_directories(${PROJECT_NAME}
     PRIVATE external/glfw/src
+    /usr/local/Cellar/boost/1.80.0/lib
     PRIVATE ${EXTRA_LINK_DIRS}
     ) # dir rel to build to hold linked lib, where linker should look
 
 target_link_libraries(${PROJECT_NAME}
     glfw
+    boost_program_options
     ${EXTRA_LINK_LIBS}
 ) # specify libs to link when linking target, can be build system name (as here) or path to a lib or name of a lib to search for
 

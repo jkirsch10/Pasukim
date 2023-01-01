@@ -1,6 +1,6 @@
 #! /bin/sh
 
-cd build ; ./cmake_tut 
+cd build ; ./pasukim
 
 # installed
-#cmake_tut
+#pasukim
