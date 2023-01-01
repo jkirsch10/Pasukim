@@ -1,0 +1,5 @@
+#define cmake_tut_VERSION_MAJOR @cmake_tut_VERSION_MAJOR@
+#define cmake_tut_VERSION_MINOR @cmake_tut_VERSION_MINOR@
+
+
+#cmakedefine USE_ADDER
