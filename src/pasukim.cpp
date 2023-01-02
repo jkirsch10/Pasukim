@@ -1,12 +1,12 @@
 #include <iostream>
 #include <exception>
 #include <pasukim_config.h>
-#ifdef USE_ADDER
-    #include <adder.hpp>
-#endif
 #include <memory>
 #include <signal.h>
 #include <boost/program_options.hpp>
+
+#include <PasukFinder.hpp>
+
 
 namespace po = boost::program_options; 
 
@@ -30,13 +30,39 @@ int main (int argc, char* argv[]){
         po::options_description desc{"Options"};
         desc.add_options()
             ("help,h", "Help screen")
-            ("Beresehit,B", "Bereshit");
+            ("Bereshit,B", po::value<std::vector<std::string>>()->multitoken(), "Bereshit");
 
         po::variables_map vm;
-        store(parse_command_line(argc, argv, desc), vm);
-        notify(vm);
-        if (vm.count("help"))
+        po::store(parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+        if (vm.count("Bereshit")) {
+            auto bPasuk = vm["Bereshit"].as<std::vector<std::string>>();
+            
+            int chapter = stoi(bPasuk[0]);
+            std::string sverse = bPasuk[1];
+            auto delim_it = sverse.find(":");
+            pasuk myPasuk;
+            PasukFinder myFinder;
+            if (delim_it == std::string::npos) {
+                myPasuk = {"Bereshit", chapter, stoi(sverse)};
+            }
+            else {
+                int everse = stoi(sverse.substr(delim_it+1,sverse.size()));
+                
+                sverse = sverse.substr(0,delim_it);
+                
+                myPasuk = {"Bereshit", chapter, stoi(sverse), everse};
+            }
+
+            myFinder.setPasuk(myPasuk);
+            myFinder.findPasuk();
+            
+
+        }
+        if (vm.count("help")){
             std::cout << desc << '\n';
+            return 0;
+        }
     }
     catch (const std::exception &e) {
         std::cerr << e.what() << '\n';

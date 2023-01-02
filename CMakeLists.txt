@@ -1,21 +1,11 @@
 cmake_minimum_required(VERSION 3.25.1 FATAL_ERROR)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 set(MAKE_CXX_FLAGS "-O3")
 
 project(pasukim VERSION 0.1)
-
-######################## START OPTIONAL LIBS #####################
-option(USE_ADDER "Sample lib" ON)
-if (USE_ADDER)
-    add_subdirectory(src/adder)
-    list(APPEND EXTRA_INCLUDE_LIBS src/adder/include)
-    list(APPEND EXTRA_LINK_DIRS src/adder) 
-    list(APPEND EXTRA_LINK_LIBS adder)
-endif()
-######################## END OPTIONAL LIBS ########################
 
 configure_file(include/pasukim_config.h.in pasukim_config.h)
 add_executable(${PROJECT_NAME} src/pasukim.cpp)
@@ -46,23 +36,24 @@ endif()
 ######################## END GIT SUBMODULES #########################
 
 add_subdirectory(external/glfw)
+add_subdirectory(src/PasukFinder)
 
 target_include_directories(${PROJECT_NAME} 
+    PUBLIC src/PasukFinder/include
     PUBLIC external/glfw/include
-    PUBLIC ${EXTRA_INCLUDE_LIBS}
     PUBLIC /usr/local/Cellar/boost/1.80.0/include
 ) #specify include path(s), makes includes not need full path in code files /  can use <>
 
 target_link_directories(${PROJECT_NAME}
+    PRIVATE src/PasukFinder
     PRIVATE external/glfw/src
     /usr/local/Cellar/boost/1.80.0/lib
-    PRIVATE ${EXTRA_LINK_DIRS}
     ) # dir rel to build to hold linked lib, where linker should look
 
 target_link_libraries(${PROJECT_NAME}
     glfw
     boost_program_options
-    ${EXTRA_LINK_LIBS}
+    PasukFinder
 ) # specify libs to link when linking target, can be build system name (as here) or path to a lib or name of a lib to search for
 
 # INSTALL
